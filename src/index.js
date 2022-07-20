@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import  categoriesRouter from "./routes/categoriesRoute.js";
 import gamesRouter from "./routes/gamesRoute.js";
+import costumersRouter from "./routes/costumersRoute.js";
 
 dotenv.config()
 
@@ -13,6 +14,7 @@ server.use(cors())
 
 server.use(categoriesRouter)
 server.use(gamesRouter)
+server.use(costumersRouter)
 
 
 const PORT= process.env.PORT || 5000
