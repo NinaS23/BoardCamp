@@ -21,17 +21,14 @@ export async function getGames(req, res) {
 
 
 export async function  insertGame(req,res){
-    const name = res.locals.name;
-    const image = res.locals.image;;
-    const stockTotal = res.locals.stockTotal;
-    const categoryId =  res.locals.categoryId;
-    const pricePerDay = res.locals.pricePerDay
+    const { name, image, stockTotal, categoryId, pricePerDay } = req.body;
     try {
-        await connection.query('INSERT INTO games (name, image, stockTotal, categoryId, pricePerDay) VALUES ($1, $2, $3, $4, $5);' , [name, image, stockTotal, categoryId, pricePerDay]);
-        res.status(201).send('created');
-    } catch (e) {
-        console.log(e)
-         res.sendStatus(500);
+        connection.query(
+            `INSERT INTO games (name, image, "stockTotal", "categoryId", "pricePerDay")
+             VALUES ($1, $2, $3, $4, $5)`, [name, image, stockTotal, categoryId, pricePerDay]);
+             res.sendStatus(201);
+    }catch(e) {
+        res.sendStatus(500);
     }
     
 }
