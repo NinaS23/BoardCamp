@@ -1,7 +1,6 @@
 import connection from "../database.js";
 
 export async function getGames(req, res) {
-    console.log("Oi")
     const { name } = req.query
     if (!name) {
         try {
