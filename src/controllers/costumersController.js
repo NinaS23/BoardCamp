@@ -13,18 +13,26 @@ export  async function getAllCostumers(req, res) {
     
         }
     }else{
-        const customersWithcPF = await connection.query('SELECT * FROM customers WHERE cpf = {$1};' , [cpf]);
-        res.status(200).send(customersWithcPF.rows);
+        const customersCpf = await connection.query(`
+        SELECT * FROM customers WHERE cpf LIKE '${cpf}%';`);
+        res.status(200).send(customersCpf.rows);
     }
 
 }
 
-export  async function getCostumersByID(req,res){
-    res.send("id")
+export async function getCostumersByID(req, res) {
+   const id = res.locals.id
+    try {
+        const getCostumer = await connection.query('SELECT * FROM customers WHERE id = $1' , [id])
+        res.status(200).send(getCostumer.rows);
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+
 }
 
 export async function insertCostumer(req, res) {
-    console.log("oi")
     const { name, phone, cpf, birthday } = req.body;
     try {
         console.log("entrei no try")

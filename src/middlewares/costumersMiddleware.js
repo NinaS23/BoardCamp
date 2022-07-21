@@ -4,6 +4,7 @@ import { costumersSchema } from "../Schemas/costumersSchema.js";
 
 export async function ValidateCostumers(req, res, next) {
     const { name, phone, cpf, birthday } = req.body;
+ 
     
     const birthdayDate = birthday.slice(0,10);
     const data = {name, phone, cpf, birthday: birthdayDate}
@@ -25,4 +26,20 @@ export async function ValidateCostumers(req, res, next) {
     
     next();
     
+}
+
+export async function IDcostumersMiddleware(req,res,next){
+    const { id } = req.params;
+
+    try{
+        const customer = await connection.query('SELECT * FROM customers WHERE id = $1', [id]);
+        if (customer.rows.length === 0) {
+            return res.status(404).send('costumer não encontrado!');
+        }
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+    res.locals.id = id;
+    next()
 }
