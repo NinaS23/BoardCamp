@@ -4,17 +4,19 @@ import cors from "cors";
 import  categoriesRouter from "./routes/categoriesRoute.js";
 import gamesRouter from "./routes/gamesRoute.js";
 import costumersRouter from "./routes/costumersRoute.js";
+import rentRouter from "./routes/rentRoute.js";
 
-dotenv.config()
+dotenv.config();
 
 
-const server = express()
-server.use(json())
-server.use(cors())
+const server = express();
+server.use(json());
+server.use(cors());
 
-server.use(categoriesRouter)
-server.use(gamesRouter)
-server.use(costumersRouter)
+server.use(categoriesRouter);
+server.use(gamesRouter);
+server.use(costumersRouter);
+server.use(rentRouter);
 
 
 const PORT= process.env.PORT || 5000
