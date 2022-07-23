@@ -38,6 +38,13 @@ export async function getRents(req, res) {
                 }
             }
 
+            delete rent.customerId;
+            delete rent.customerName;
+            delete rent.gameId;
+            delete rent.gameName;
+            delete rent.categoryId;
+            delete rent.categoryName;
+
             listRentals.push(rent)
         }
         res.status(200).send(listRentals);

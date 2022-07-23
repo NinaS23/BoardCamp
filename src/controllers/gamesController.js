@@ -2,18 +2,21 @@ import connection from "../database.js";
 
 export async function getGames(req, res) {
     const { name } = req.query
-    if (!name) {
-        try {
-            const games = await connection.query('SELECT * FROM games;');
-             res.status(200).send(games.rows);
-        } catch (e) {
-            console.log(e)
-            res.sendStatus(500);
-
+    try {
+        if (!name) {
+            const Allgames = await connection.query('SELECT * FROM games;');
+            res.status(200).send(Allgames.rows);
+        } else {
+            const games = await connection.query(`
+            SELECT *
+            FROM games
+            WHERE name LIKE '${name}%';`);
+            res.status(200).send(games.rows);
         }
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
     }
-    //fazer aq caso exista name , filtrar para passar os nomes dos games que começam com 
-    // o name ou que são igual ao name
 
 }
 
