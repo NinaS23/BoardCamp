@@ -21,9 +21,9 @@ export async function getRents(req, res) {
         ${gameId ? `WHERE games.id = ${parseInt(gameId)}` : ""}
         `)
         
-        const listRentals = [] 
+        const listRentals = []
 
-        for(let rent of rentals){//variável of interável
+        for (let rent of rentals) {//variável of interável
             rent = {
                 ...rent,
                 customer: {
@@ -37,7 +37,7 @@ export async function getRents(req, res) {
                     categoryName: rent.categoryName
                 }
             }
-          
+
             listRentals.push(rent)
         }
         res.status(200).send(listRentals);
@@ -68,8 +68,58 @@ export async function insertRent(req, res) {
 
         res.status(201).send("created")
     } catch (e) {
-    console.log(e)
-    res.status(500).send("controlador rent")
+        console.log(e)
+        res.status(500).send("controlador rent")
+    }
+
 }
 
+
+
+export async function closeRent(req, res) {
+    const { id } = req.params;
+    const { rental } = res.locals;
+    const { daysRented, rentDate } = rental.rows[0];
+
+    const diffDays = dayjs().diff(dayjs(rentDate).add(daysRented, 'day'), 'day')
+    const isDelayed = diffDays > 0 ? true : false;
+    let delay = 0;
+    if (isDelayed) {
+        delay = (originalPrice / daysRented) * diffDays
+    }
+    try {
+        const game = await connection.query('SELECT * FROM games WHERE id = $1', [rental.rows[0].gameId]);
+        const pricePerDay = game.rows[0].pricePerDay * delay;
+        await connection.query(`
+        UPDATE rentals
+        SET
+        "returnDate" = $1,
+        "delayFee" = $2
+        WHERE id = $3
+        `, [dayjs().format("YYYY-MM-DD"), pricePerDay, id]);
+        res.sendStatus(200);
+    } catch (e) {
+        console.log(e)
+        res.status(500).send("controller insertRent")
+    }
+
+}
+
+
+export async function deleteRent(req, res) {
+    const { id } = req.params;
+
+    try {
+        await connection.query(
+            `
+        DELETE FROM rentals
+        WHERE id=$1
+      `,
+            [id]
+        );
+
+        res.status(200).send('deletado com sucesso!');
+    } catch (error) {
+        res.sendStatus(500);
+    }
 }
