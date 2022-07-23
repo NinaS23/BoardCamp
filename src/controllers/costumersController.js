@@ -7,8 +7,8 @@ export  async function getAllCostumers(req, res) {
         try {
             const customers = await connection.query( `
             SELECT * FROM customers
-            ${limit ? `LIMIT ${limit}` : ""}
-            ${offset ? `OFFSET ${offset}` : ""}
+            ${limit ? `LIMIT ${parsenint(limit)}` : ""}
+            ${offset ? `OFFSET ${parsenint(offset)}` : ""}
             `);
             res.status(200).send(customers.rows);
         } catch (e) {

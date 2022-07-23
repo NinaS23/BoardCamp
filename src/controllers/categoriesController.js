@@ -6,8 +6,8 @@ export async function getAllCategories(req, res) {
     try {
         const categories = await connection.query(`
         SELECT * FROM categories
-        ${limit ? `LIMIT ${limit}` : ""}
-        ${offset ? `OFFSET ${offset}` : ""}
+        ${limit ? `LIMIT ${parsenint(limit)}` : ""}
+        ${offset ? `OFFSET ${parsenint(offset)}` : ""}
         `);
         return res.status(200).send(categories.rows);
     } catch (e) {

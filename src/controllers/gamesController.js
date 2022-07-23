@@ -6,8 +6,8 @@ export async function getGames(req, res) {
         if (!name) {
             const Allgames = await connection.query(`
         SELECT * FROM games
-        ${limit ? `LIMIT ${limit}` : ""}
-        ${offset ? `OFFSET ${offset}` : ""}
+        ${limit ? `LIMIT ${parsenint(limit)}` : ""}
+        ${offset ? `OFFSET ${parsenint(offset)}` : ""}
             `);
             res.status(200).send(Allgames.rows);
         } else {

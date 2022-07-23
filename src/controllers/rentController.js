@@ -19,8 +19,8 @@ export async function getRents(req, res) {
         JOIN categories ON categories.id = games."categoryId"
         ${customerId ? `WHERE customers.id = ${parseInt(customerId)}` : ""}
         ${gameId ? `WHERE games.id = ${parseInt(gameId)}` : ""}
-        ${limit ? `LIMIT ${limit}` : ""}
-        ${offset ? `OFFSET ${offset}` : ""}
+        ${limit ? `LIMIT ${parsenint(limit)}` : ""}
+        ${offset ? `OFFSET ${parsenint(offset)}` : ""}
         `)
         
         const listRentals = []
