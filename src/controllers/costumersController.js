@@ -2,10 +2,14 @@
 import connection from "../database.js";
 
 export  async function getAllCostumers(req, res) {
-    const { cpf } = req.query;
+    const { cpf, limit, offset} = req.query;
     if(!cpf){
         try {
-            const customers = await connection.query('SELECT * FROM customers;');
+            const customers = await connection.query( `
+            SELECT * FROM customers
+            ${limit ? `LIMIT ${limit}` : ""}
+            ${offset ? `OFFSET ${offset}` : ""}
+            `);
             res.status(200).send(customers.rows);
         } catch (e) {
             console.log(e)

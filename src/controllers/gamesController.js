@@ -1,10 +1,14 @@
 import connection from "../database.js";
 
 export async function getGames(req, res) {
-    const { name } = req.query
+    const { name, limit, offset } = req.query
     try {
         if (!name) {
-            const Allgames = await connection.query('SELECT * FROM games;');
+            const Allgames = await connection.query(`
+        SELECT * FROM games
+        ${limit ? `LIMIT ${limit}` : ""}
+        ${offset ? `OFFSET ${offset}` : ""}
+            `);
             res.status(200).send(Allgames.rows);
         } else {
             const games = await connection.query(`

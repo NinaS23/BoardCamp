@@ -3,7 +3,7 @@ import connection from "../database.js";
 
 
 export async function getRents(req, res) {
-    const { customerId, gameId } = req.query
+    const { customerId, gameId, limit, offset } = req.query
     try {
         const { rows: rentals } = await connection.query(`
      SELECT rentals.*,
@@ -19,6 +19,8 @@ export async function getRents(req, res) {
         JOIN categories ON categories.id = games."categoryId"
         ${customerId ? `WHERE customers.id = ${parseInt(customerId)}` : ""}
         ${gameId ? `WHERE games.id = ${parseInt(gameId)}` : ""}
+        ${limit ? `LIMIT ${limit}` : ""}
+        ${offset ? `OFFSET ${offset}` : ""}
         `)
         
         const listRentals = []

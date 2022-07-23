@@ -2,10 +2,16 @@ import connection from "../database.js"
 
 
 export async function getAllCategories(req, res) {
+    const { limit, offset } = req.query;
     try {
-        const categories = await connection.query('SELECT * FROM categories;');
+        const categories = await connection.query(`
+        SELECT * FROM categories
+        ${limit ? `LIMIT ${limit}` : ""}
+        ${offset ? `OFFSET ${offset}` : ""}
+        `);
         return res.status(200).send(categories.rows);
     } catch (e) {
+        console.log(e)
         res.sendStatus(500);
     }
 
