@@ -5,8 +5,6 @@ import { costumersSchema } from "../Schemas/costumersSchema.js";
 export async function ValidateCostumers(req, res, next) {
     const { name, phone, cpf, birthday } = req.body;
  
-    
-   
     const data = {name, phone, cpf, birthday}
     const { error } = costumersSchema.validate(data);
 
