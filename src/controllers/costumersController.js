@@ -1,28 +1,31 @@
 
+
 import connection from "../database.js";
 
-export  async function getAllCostumers(req, res) {
-    const { cpf, limit, offset} = req.query;
-    if(!cpf){
-        try {
-            const customers = await connection.query( `
+export async function getAllCostumers(req, res) {
+    const { cpf, limit, offset } = req.query;
+    try {
+        if (!cpf) {
+
+            const customers = await connection.query(`
             SELECT * FROM customers
             ${limit ? `LIMIT ${parsenint(limit)}` : ""}
             ${offset ? `OFFSET ${parsenint(offset)}` : ""}
             `);
-            res.status(200).send(customers.rows);
-        } catch (e) {
-            console.log(e)
-            res.sendStatus(500);
-    
-        }
-    }else{
-        const customersCpf = await connection.query(`
-        SELECT * FROM customers WHERE cpf LIKE '${cpf}%';`);
-        res.status(200).send(customersCpf.rows);
-    }
+            return res.status(200).send(customers.rows);
 
+        } else {
+            const customersCpf = await connection.query(`
+        SELECT * FROM customers WHERE cpf LIKE '${cpf}%';`);
+           return  res.status(200).send(customersCpf.rows);
+        }
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
 }
+
+
 
 export async function getCostumersByID(req, res) {
    const id = res.locals.id
@@ -57,5 +60,6 @@ export async function updateCustumerById(req,res){
         console.log(e)
         res.sendStatus(500)
     }
+
 
 }
